@@ -79,6 +79,10 @@ build {
   # Update and Upgrade
   provisioner "shell" {
     inline = [
+      "sudo apt-get clean",
+      "sudo cp -r /var/lib/apt/lists /var/lib/apt/lists.old",
+      "sudo rm -rf /var/lib/apt/lists/partial/",
+      "sudo apt-get clean",
       "sudo apt-get update",
       "sudo apt-get upgrade -y"
     ]
