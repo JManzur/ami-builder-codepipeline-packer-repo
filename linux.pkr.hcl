@@ -40,7 +40,7 @@ source "amazon-ebs" "main" {
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
   ssh_username                = "ec2-user"
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   skip_region_validation      = true
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
