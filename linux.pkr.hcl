@@ -48,6 +48,7 @@ source "amazon-ebs" "main" {
     Statement {
       Effect = "Allow"
       Action = [
+        "ssm:StartSession",
         "ssm:DescribeAssociation",
         "ssm:GetDeployablePatchSnapshotForInstance",
         "ssm:GetDocument",
