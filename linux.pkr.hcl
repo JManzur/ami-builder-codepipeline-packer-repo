@@ -39,7 +39,7 @@ source "amazon-ebs" "main" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
-  ssh_username                = "ubuntu"
+  ssh_username                = "ec2-user"
   associate_public_ip_address = false
   skip_region_validation      = true
   launch_block_device_mappings {
@@ -51,10 +51,10 @@ source "amazon-ebs" "main" {
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
-      name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+      name                = "amzn2-ami-hvm*"
       root-device-type    = "ebs"
     }
-    owners      = ["099720109477"]
+    owners      = ["amazon"]
     most_recent = true
   }
   aws_polling {
@@ -79,7 +79,9 @@ build {
   # Install Docker
   provisioner "shell" {
     inline = [
-      "curl -fsSL https://get.docker.com -o get-docker.sh",
+      "sudo yum update -y",
+      "sudo amazon-linux-extras install docker -y",
+      "sudo service docker start",
       "sudo sh get-docker.sh"
     ]
   }
@@ -87,15 +89,13 @@ build {
   # Add the Ubuntu user to the docker group
   provisioner "shell" {
     inline = [
-      "sudo groupadd docker",
-      "sudo usermod -aG docker ubuntu",
+      "sudo usermod -aG docker ec2-user"
     ]
   }
 
   # Pull and run the demo app.
   provisioner "shell" {
     inline = [
-      "su -s ubuntu",
       "docker pull jmanzur/demo-lb-app:v1.1",
       "docker run --restart=always -d -p 5000:5000 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
     ]
