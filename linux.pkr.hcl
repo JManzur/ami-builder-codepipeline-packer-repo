@@ -1,8 +1,8 @@
 packer {
   required_plugins {
     amazon = {
-      version = "<= 1.0.8"
-      source  = "github.com/hashicorp/amazon"
+      version = ">= 1.1.1"
+      source = "github.com/hashicorp/amazon"
     }
   }
 }
@@ -19,16 +19,6 @@ variable "ami_name_prefix" {
   default = "linux"
 }
 
-#Use: instance_type = var.instance_type["type1"]
-variable "instance_type" {
-  type = map(string)
-  default = {
-    "type1" = "t2.micro"
-    "type2" = "t2.small"
-    "type3" = "t2.medium"
-  }
-}
-
 locals {
   ami_name      = join("-", [var.ami_name_prefix, formatdate("MMDDYYYY-hmmss", timestamp())])
   tag_timestamp = formatdate("MM-DD-YYYY hh:mm:ss", timestamp())
@@ -37,7 +27,7 @@ locals {
 /* Main AMI Build Definition */
 source "amazon-ebs" "main" {
   ami_name                    = local.ami_name
-  instance_type               = var.instance_type["type1"]
+  instance_type               = "t2.micro"
   region                      = var.AWS_REGION
   ssh_username                = "ubuntu"
   associate_public_ip_address = false
