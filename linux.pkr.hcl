@@ -2,7 +2,7 @@ packer {
   required_plugins {
     amazon = {
       version = ">= 1.1.1"
-      source = "github.com/hashicorp/amazon"
+      source  = "github.com/hashicorp/amazon"
     }
   }
 }
@@ -41,6 +41,7 @@ source "amazon-ebs" "main" {
   region                      = var.AWS_REGION
   ssh_username                = "ubuntu"
   associate_public_ip_address = false
+  skip_region_validation      = true
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
     volume_size           = 35
