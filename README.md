@@ -1,1 +1,1 @@
-# ami-builder-codepipeline-packer-repo
+# packer-ami-builder
