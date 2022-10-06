@@ -36,10 +36,10 @@ locals {
 
 /* Main AMI Build Definition */
 source "amazon-ebs" "main" {
-  ami_name      = local.ami_name
-  instance_type = var.instance_type["type1"]
-  region        = var.AWS_REGION
-  ssh_username  = "ubuntu"
+  ami_name                    = local.ami_name
+  instance_type               = var.instance_type["type1"]
+  region                      = var.AWS_REGION
+  ssh_username                = "ubuntu"
   associate_public_ip_address = false
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
@@ -49,11 +49,11 @@ source "amazon-ebs" "main" {
   }
   source_ami_filter {
     filters = {
-        virtualization-type = "hvm"
-        name = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
-        root-device-type = "ebs"
+      virtualization-type = "hvm"
+      name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+      root-device-type    = "ebs"
     }
-    owners = ["099720109477"]
+    owners      = ["099720109477"]
     most_recent = true
   }
   aws_polling {
@@ -78,7 +78,7 @@ build {
   # Update and Upgrade
   provisioner "shell" {
     inline = [
-      "sudo apt-get update"
+      "sudo apt-get update",
       "sudo apt-get upgrade -y"
     ]
   }
