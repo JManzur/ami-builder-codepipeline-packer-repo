@@ -99,6 +99,7 @@ build {
   # Add the Ubuntu user to the docker group
   provisioner "shell" {
     inline = [
+      "sudo groupadd docker",
       "sudo usermod -aG docker ubuntu",
     ]
   }
@@ -106,6 +107,7 @@ build {
   # Pull and run the demo app.
   provisioner "shell" {
     inline = [
+      "su -s ubuntu",
       "docker pull jmanzur/demo-lb-app:v1.1",
       "docker run --restart=always -d -p 5000:5000 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
     ]
