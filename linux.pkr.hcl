@@ -40,8 +40,44 @@ source "amazon-ebs" "main" {
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
   ssh_username                = "ec2-user"
-  associate_public_ip_address = true
+  ssh_interface               = "session_manager"
+  communicator                = "ssh"
+  associate_public_ip_address = false
   skip_region_validation      = true
+  temporary_iam_instance_profile_policy_document {
+    Statement {
+      Effect = "Allow"
+      Action = [
+        "ssm:DescribeAssociation",
+        "ssm:GetDeployablePatchSnapshotForInstance",
+        "ssm:GetDocument",
+        "ssm:DescribeDocument",
+        "ssm:GetManifest",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:ListAssociations",
+        "ssm:ListInstanceAssociations",
+        "ssm:PutInventory",
+        "ssm:PutComplianceItems",
+        "ssm:PutConfigurePackageResult",
+        "ssm:UpdateAssociationStatus",
+        "ssm:UpdateInstanceAssociationStatus",
+        "ssm:UpdateInstanceInformation",
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel",
+        "ec2messages:AcknowledgeMessage",
+        "ec2messages:DeleteMessage",
+        "ec2messages:FailMessage",
+        "ec2messages:GetEndpoint",
+        "ec2messages:GetMessages",
+        "ec2messages:SendReply"
+      ]
+      Resource = ["*"]
+    }
+    Version = "2012-10-17"
+  }
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
     volume_size           = 35
