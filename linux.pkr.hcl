@@ -116,10 +116,10 @@ build {
   # Install Docker
   provisioner "shell" {
     inline = [
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install docker -y",
-      "sudo service docker start",
-      "sudo sh get-docker.sh"
+      "yum update -y",
+      "yum install jq -y",
+      "amazon-linux-extras install docker -y",
+      "service docker start"
     ]
   }
 
@@ -133,8 +133,8 @@ build {
   # Pull and run the demo app.
   provisioner "shell" {
     inline = [
-      "docker pull jmanzur/demo-lb-app:v1.1",
-      "docker run --restart=always -d -p 5000:5000 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
+      "docker pull jmanzur/demo-lb-app:v1.2",
+      "docker run --restart=always -d -p 8882:8882 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
     ]
   }
 }
