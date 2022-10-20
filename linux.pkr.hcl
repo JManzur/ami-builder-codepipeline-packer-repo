@@ -2,15 +2,25 @@ packer {
   required_plugins {
     amazon = {
       version = ">= 1.1.1"
-      source  = "github.com/hashicorp/amazon"
+      source  = "github.com/hashicorp/amazon" #Ref.: https://github.com/hashicorp/packer-plugin-amazon
     }
   }
 }
 
-/* CodeBuil Enviroment Variables */
+/* CodePipeline Enviroment Variables */
 variable "AWS_REGION" {
   type    = string
   default = env("AWS_REGION")
+}
+
+variable "VPCID" {
+  type    = string
+  default = env("VPCID")
+}
+
+variable "SubnetID" {
+  type    = string
+  default = env("SubnetID")
 }
 
 /* Locals Enviroment Variables */
@@ -112,6 +122,19 @@ build {
   sources = [
     "source.amazon-ebs.main"
   ]
+
+  provisioner "shell" {
+    environment_vars = [
+      "AWS_REGION=${var.AWS_REGION}",
+      "VPCID=${var.VPCID}",
+      "SubnetID=${var.SubnetID}",
+    ]
+    inline = [
+      "echo AWS Region: $AWS_REGION",
+      "echo VPC ID: $VPCID",
+      "echo Private Subnet ID: $SubnetID"
+    ]
+  }
 
   # Install Docker
   provisioner "shell" {
