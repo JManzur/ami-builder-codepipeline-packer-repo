@@ -68,6 +68,8 @@ source "amazon-ebs" "linux" {
   ssh_timeout                 = "15m"
   ssh_clear_authorized_keys   = true
   ssh_username                = "ec2-user"
+  ssh_agent_auth              = false
+  temporary_key_pair_type     = "ed25519"
   communicator                = "ssh"
 
   aws_polling {
