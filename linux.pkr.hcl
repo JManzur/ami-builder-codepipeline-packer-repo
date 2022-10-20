@@ -34,24 +34,24 @@ locals {
   tag_timestamp = formatdate("MM-DD-YYYY hh:mm:ss", timestamp())
 }
 
-data "amazon-ami" "ubuntu" {
-    filters = {
-        virtualization-type = "hvm"
-        name = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
-        root-device-type = "ebs"
-    }
-    owners = ["099720109477"]
-    most_recent = true
+data "amazon-ami" "linux2" {
+  filters = {
+    virtualization-type = "hvm"
+    name                = "amzn2-ami-hvm*"
+    root-device-type    = "ebs"
+  }
+  owners      = ["amazon"]
+  most_recent = true
 }
 
 /* Main AMI Build Definition */
 source "amazon-ebs" "linux" {
-  ami_name                    = local.ami_name
-  instance_type               = var.instance_type["type1"]
-  region                      = var.AWS_REGION
-  source_ami                  = data.amazon-ami.linux2.id
-  ssh_username                = "ec2-user"
-  communicator                = "ssh"
+  ami_name      = local.ami_name
+  instance_type = var.instance_type["type1"]
+  region        = var.AWS_REGION
+  source_ami    = data.amazon-ami.linux2.id
+  ssh_username  = "ec2-user"
+  communicator  = "ssh"
 
   tags = {
     Name            = local.ami_name
