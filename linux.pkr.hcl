@@ -62,14 +62,14 @@ source "amazon-ebs" "linux" {
   source_ami                  = data.amazon-ami.linux2.id
   vpc_id                      = var.VPCID
   subnet_id                   = var.SubnetID
-  associate_public_ip_address = false
-  ssh_interface               = "private_ip"
+  associate_public_ip_address = true
+  ssh_interface               = "public_ip"
   ssh_port                    = 22
   ssh_timeout                 = "15m"
   ssh_clear_authorized_keys   = true
   ssh_username                = "ec2-user"
   ssh_agent_auth              = false
-  temporary_key_pair_type     = "ed25519"
+  temporary_key_pair_type     = "ed25519" #https://discuss.hashicorp.com/t/packer-unable-to-ssh-into-amazon-linux-2022/33519
   communicator                = "ssh"
 
   aws_polling {
