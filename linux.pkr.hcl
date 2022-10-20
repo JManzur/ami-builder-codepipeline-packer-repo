@@ -49,46 +49,14 @@ source "amazon-ebs" "main" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
-  ssh_username                = "ec2-user"
-  ssh_interface               = "session_manager"
   communicator                = "ssh"
+  ssh_username                = "ec2-user"
+  ssh_clear_authorized_keys   = true
+  ssh_timeout                 = "30m"
+  vpc_id                      = var.VPCID
+  subnet_id                   = var.SubnetID
   associate_public_ip_address = false
   skip_region_validation      = true
-  temporary_iam_instance_profile_policy_document {
-    Statement {
-      Effect = "Allow"
-      Action = [
-        "ssm:StartSession",
-        "ssm:DescribeAssociation",
-        "ssm:GetDeployablePatchSnapshotForInstance",
-        "ssm:GetDocument",
-        "ssm:DescribeDocument",
-        "ssm:GetManifest",
-        "ssm:GetParameter",
-        "ssm:GetParameters",
-        "ssm:ListAssociations",
-        "ssm:ListInstanceAssociations",
-        "ssm:PutInventory",
-        "ssm:PutComplianceItems",
-        "ssm:PutConfigurePackageResult",
-        "ssm:UpdateAssociationStatus",
-        "ssm:UpdateInstanceAssociationStatus",
-        "ssm:UpdateInstanceInformation",
-        "ssmmessages:CreateControlChannel",
-        "ssmmessages:CreateDataChannel",
-        "ssmmessages:OpenControlChannel",
-        "ssmmessages:OpenDataChannel",
-        "ec2messages:AcknowledgeMessage",
-        "ec2messages:DeleteMessage",
-        "ec2messages:FailMessage",
-        "ec2messages:GetEndpoint",
-        "ec2messages:GetMessages",
-        "ec2messages:SendReply"
-      ]
-      Resource = ["*"]
-    }
-    Version = "2012-10-17"
-  }
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
     volume_size           = 35
