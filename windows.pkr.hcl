@@ -35,7 +35,7 @@ locals {
 }
 
 /* Main AMI Build Definition */
-source "amazon-ebs" "main" {
+source "amazon-ebs" "windows" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
@@ -77,7 +77,7 @@ source "amazon-ebs" "main" {
 /* Build Execution */
 build {
   sources = [
-    "source.amazon-ebs.main"
+    "source.amazon-ebs.windows"
   ]
 
   # Bootstrap windows

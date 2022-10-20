@@ -45,18 +45,15 @@ locals {
 }
 
 /* Main AMI Build Definition */
-source "amazon-ebs" "main" {
-  ami_name                    = local.ami_name
-  instance_type               = var.instance_type["type1"]
-  region                      = var.AWS_REGION
-  communicator                = "ssh"
-  ssh_username                = "ec2-user"
-  ssh_clear_authorized_keys   = true
-  ssh_timeout                 = "30m"
-  vpc_id                      = var.VPCID
-  subnet_id                   = var.SubnetID
-  associate_public_ip_address = false
-  skip_region_validation      = true
+source "amazon-ebs" "linux" {
+  ami_name                  = local.ami_name
+  instance_type             = var.instance_type["type1"]
+  region                    = var.AWS_REGION
+  vpc_id                    = var.VPCID
+  subnet_id                 = var.SubnetID
+  communicator              = "ssh"
+  ssh_username              = "ec2-user"
+  ssh_clear_authorized_keys = true
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
     volume_size           = 35
@@ -88,7 +85,7 @@ source "amazon-ebs" "main" {
 /* Build Execution */
 build {
   sources = [
-    "source.amazon-ebs.main"
+    "source.amazon-ebs.linux"
   ]
 
   provisioner "shell" {
