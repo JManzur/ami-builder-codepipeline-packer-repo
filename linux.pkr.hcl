@@ -46,15 +46,17 @@ locals {
 
 /* Main AMI Build Definition */
 source "amazon-ebs" "linux" {
-  ami_name                  = local.ami_name
-  instance_type             = var.instance_type["type1"]
-  region                    = var.AWS_REGION
-  vpc_id                    = var.VPCID
-  subnet_id                 = var.SubnetID
-  ssh_timeout               = "15m"
-  ssh_clear_authorized_keys = true
-  communicator              = "ssh"
-  ssh_username              = "ec2-user"
+  ami_name                    = local.ami_name
+  instance_type               = var.instance_type["type1"]
+  region                      = var.AWS_REGION
+  vpc_id                      = var.VPCID
+  subnet_id                   = var.SubnetID
+  associate_public_ip_address = false
+  ssh_interface               = "private_ip"
+  ssh_timeout                 = "15m"
+  ssh_clear_authorized_keys   = true
+  communicator                = "ssh"
+  ssh_username                = "ec2-user"
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
