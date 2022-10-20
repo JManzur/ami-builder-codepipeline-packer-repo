@@ -13,16 +13,6 @@ variable "AWS_REGION" {
   default = env("AWS_REGION")
 }
 
-variable "VPCID" {
-  type    = string
-  default = env("VPCID")
-}
-
-variable "SubnetID" {
-  type    = string
-  default = env("SubnetID")
-}
-
 /* Locals Enviroment Variables */
 variable "ami_name_prefix" {
   type    = string
@@ -43,17 +33,6 @@ locals {
   ami_name      = join("-", [var.ami_name_prefix, formatdate("MMDDYYYY-hmmss", timestamp())])
   tag_timestamp = formatdate("MM-DD-YYYY hh:mm:ss", timestamp())
 }
-
-data "amazon-ami" "linux2" {
-  filters = {
-    virtualization-type = "hvm"
-    name                = "amzn2-ami-hvm*"
-    root-device-type    = "ebs"
-  }
-  owners      = ["amazon"]
-  most_recent = true
-}
-
 
 data "amazon-ami" "ubuntu" {
     filters = {
@@ -89,26 +68,13 @@ build {
     "source.amazon-ebs.linux"
   ]
 
-  provisioner "shell" {
-    environment_vars = [
-      "AWS_REGION=${var.AWS_REGION}",
-      "VPCID=${var.VPCID}",
-      "SubnetID=${var.SubnetID}",
-    ]
-    inline = [
-      "echo AWS Region: $AWS_REGION",
-      "echo VPC ID: $VPCID",
-      "echo Private Subnet ID: $SubnetID"
-    ]
-  }
-
   # Install Docker
   provisioner "shell" {
     inline = [
-      "yum update -y",
-      "yum install jq -y",
-      "amazon-linux-extras install docker -y",
-      "service docker start"
+      "sudo yum update -y",
+      "sudo yum install jq -y",
+      "sudo amazon-linux-extras install docker -y",
+      "sudo service docker start"
     ]
   }
 
