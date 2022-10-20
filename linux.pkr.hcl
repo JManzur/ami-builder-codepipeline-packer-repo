@@ -54,12 +54,6 @@ source "amazon-ebs" "linux" {
   communicator              = "ssh"
   ssh_username              = "ec2-user"
   ssh_clear_authorized_keys = true
-  launch_block_device_mappings {
-    device_name           = "/dev/sda1"
-    volume_size           = 35
-    volume_type           = "gp2"
-    delete_on_termination = true
-  }
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
