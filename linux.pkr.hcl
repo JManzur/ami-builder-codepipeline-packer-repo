@@ -51,9 +51,9 @@ source "amazon-ebs" "linux" {
   region                    = var.AWS_REGION
   vpc_id                    = var.VPCID
   subnet_id                 = var.SubnetID
+  ssh_clear_authorized_keys = true
   communicator              = "ssh"
   ssh_username              = "ec2-user"
-  ssh_clear_authorized_keys = true
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
