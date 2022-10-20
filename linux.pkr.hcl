@@ -54,12 +54,23 @@ data "amazon-ami" "linux2" {
   most_recent = true
 }
 
+
+data "amazon-ami" "ubuntu" {
+    filters = {
+        virtualization-type = "hvm"
+        name = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+        root-device-type = "ebs"
+    }
+    owners = ["099720109477"]
+    most_recent = true
+}
+
 /* Main AMI Build Definition */
 source "amazon-ebs" "linux" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
-  source_ami                  = data.amazon-ami.linux2.id
+  source_ami                  = data.amazon-ami.ubuntu.id
   vpc_id                      = var.VPCID
   subnet_id                   = var.SubnetID
   associate_public_ip_address = true
@@ -67,9 +78,9 @@ source "amazon-ebs" "linux" {
   ssh_port                    = 22
   ssh_timeout                 = "15m"
   ssh_clear_authorized_keys   = true
-  ssh_username                = "ec2-user"
+  ssh_username                = "ubuntu"
   ssh_agent_auth              = false
-  temporary_key_pair_type     = "ed25519" #https://discuss.hashicorp.com/t/packer-unable-to-ssh-into-amazon-linux-2022/33519
+  // temporary_key_pair_type     = "ed25519" #https://discuss.hashicorp.com/t/packer-unable-to-ssh-into-amazon-linux-2022/33519
   communicator                = "ssh"
 
   aws_polling {
@@ -105,28 +116,28 @@ build {
     ]
   }
 
-  # Install Docker
-  provisioner "shell" {
-    inline = [
-      "yum update -y",
-      "yum install jq -y",
-      "amazon-linux-extras install docker -y",
-      "service docker start"
-    ]
-  }
+  // # Install Docker
+  // provisioner "shell" {
+  //   inline = [
+  //     "yum update -y",
+  //     "yum install jq -y",
+  //     "amazon-linux-extras install docker -y",
+  //     "service docker start"
+  //   ]
+  // }
 
-  # Add the Ubuntu user to the docker group
-  provisioner "shell" {
-    inline = [
-      "sudo usermod -aG docker ec2-user"
-    ]
-  }
+  // # Add the Ubuntu user to the docker group
+  // provisioner "shell" {
+  //   inline = [
+  //     "sudo usermod -aG docker ec2-user"
+  //   ]
+  // }
 
-  # Pull and run the demo app.
-  provisioner "shell" {
-    inline = [
-      "docker pull jmanzur/demo-lb-app:v1.2",
-      "docker run --restart=always -d -p 8882:8882 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
-    ]
-  }
+  // # Pull and run the demo app.
+  // provisioner "shell" {
+  //   inline = [
+  //     "docker pull jmanzur/demo-lb-app:v1.2",
+  //     "docker run --restart=always -d -p 8882:8882 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
+  //   ]
+  // }
 }
