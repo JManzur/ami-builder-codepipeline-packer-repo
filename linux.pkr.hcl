@@ -44,32 +44,37 @@ locals {
   tag_timestamp = formatdate("MM-DD-YYYY hh:mm:ss", timestamp())
 }
 
+data "amazon-ami" "linux2" {
+  filters = {
+    virtualization-type = "hvm"
+    name                = "amzn2-ami-hvm*"
+    root-device-type    = "ebs"
+  }
+  owners      = ["amazon"]
+  most_recent = true
+}
+
 /* Main AMI Build Definition */
 source "amazon-ebs" "linux" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
+  source_ami                  = data.amazon-ami.linux2.id
   vpc_id                      = var.VPCID
   subnet_id                   = var.SubnetID
   associate_public_ip_address = false
   ssh_interface               = "private_ip"
+  ssh_port                    = 22
   ssh_timeout                 = "15m"
   ssh_clear_authorized_keys   = true
-  communicator                = "ssh"
   ssh_username                = "ec2-user"
-  source_ami_filter {
-    filters = {
-      virtualization-type = "hvm"
-      name                = "amzn2-ami-hvm*"
-      root-device-type    = "ebs"
-    }
-    owners      = ["amazon"]
-    most_recent = true
-  }
+  communicator                = "ssh"
+
   aws_polling {
     delay_seconds = 30
     max_attempts  = 120
   }
+
   tags = {
     Name            = local.ami_name
     CreatedBy       = "CodeBuild - AMI-Builder"
