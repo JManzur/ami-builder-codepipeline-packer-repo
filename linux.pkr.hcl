@@ -68,7 +68,7 @@ build {
     "source.amazon-ebs.linux"
   ]
 
-  # Install Docker
+  # Install Docker and tools.
   provisioner "shell" {
     inline = [
       "sudo yum update -y",
@@ -78,10 +78,11 @@ build {
     ]
   }
 
-  # Add the Ubuntu user to the docker group
+  # Add the user to the docker group, and fix permissions.
   provisioner "shell" {
     inline = [
-      "sudo usermod -aG docker ec2-user"
+      "sudo usermod -aG docker ec2-user",
+      "sudo chmod 666 /var/run/docker.sock"
     ]
   }
 
