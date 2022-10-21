@@ -90,7 +90,7 @@ build {
   provisioner "shell" {
     inline = [
       "sudo docker pull jmanzur/demo-lb-app:v1.2",
-      "sudo docker run --restart=always -d -p 8882:8882 --name DEMO-LB-APP $(docker images --filter 'reference=jmanzur/demo-lb-app' --format '{{.ID}}')"
+      "sudo docker run --restart=always -d -p 8882:8882 --name DEMO-LB-APP jmanzur/demo-lb-app:v1.2"
     ]
   }
 }
