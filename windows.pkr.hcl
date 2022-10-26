@@ -89,7 +89,7 @@ build {
   provisioner "powershell" {
     script = "./Files/Windows/Scripts/Install-Notepad.ps1"
   }
-  
+
   # Copy Website files:
   provisioner "file" {
     destination = "C:/AppWebsite/"
