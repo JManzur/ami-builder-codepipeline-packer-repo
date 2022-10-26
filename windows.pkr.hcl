@@ -39,7 +39,7 @@ source "amazon-ebs" "windows" {
   ami_name                    = local.ami_name
   instance_type               = var.instance_type["type1"]
   region                      = var.AWS_REGION
-  user_data_file              = "./scripts/windows/bootstrap_winrm.txt"
+  user_data_file              = "./Files/Windows/Scripts/bootstrap_winrm.txt"
   communicator                = "winrm"
   winrm_insecure              = true
   winrm_username              = "Administrator"
@@ -82,16 +82,22 @@ build {
 
   # Bootstrap windows
   provisioner "powershell" {
-    script = "./scripts/windows/Bootstrap-Windows.ps1"
+    script = "./Files/Windows/Scripts/Bootstrap-Windows.ps1"
   }
 
   # Install Notepad++
   provisioner "powershell" {
-    script = "./scripts/windows/install-notepad.ps1"
+    script = "./Files/Windows/Scripts/Install-Notepad.ps1"
+  }
+  
+  # Copy Website files:
+  provisioner "file" {
+    destination = "C:/AppWebsite/"
+    source      = "./Files/Windows/WebsiteFiles"
   }
 
   # Execute Sysprep: Removes computer-specific information
   provisioner "powershell" {
-    script = "./scripts/windows/syspred.ps1"
+    script = "./Files/Windows/Scripts/syspred.ps1"
   }
 }
