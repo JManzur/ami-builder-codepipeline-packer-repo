@@ -93,7 +93,7 @@ build {
   # Copy Website files:
   provisioner "file" {
     destination = "C:/AppWebsite/"
-    source      = "./Files/Windows/WebsiteFiles"
+    source      = "./Files/Windows/AppWebsite"
   }
 
   # Execute Sysprep: Removes computer-specific information
