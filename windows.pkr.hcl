@@ -80,20 +80,25 @@ build {
     "source.amazon-ebs.windows"
   ]
 
-  # Bootstrap windows
+  # Bootstrap Windows:
   provisioner "powershell" {
     script = "./Files/Windows/Scripts/Bootstrap-Windows.ps1"
   }
 
-  # Install Notepad++
+  # Install Notepad++:
   provisioner "powershell" {
     script = "./Files/Windows/Scripts/Install-Notepad.ps1"
   }
 
   # Copy Website files:
   provisioner "file" {
-    destination = "C:/AppWebsite/"
+    destination = "C:/"
     source      = "./Files/Windows/AppWebsite"
+  }
+
+  # Install IIS and Deploy Website:
+  provisioner "powershell" {
+    script = "./Files/Windows/Scripts/Deploy-IIS-Website.ps1"
   }
 
   # Execute Sysprep: Removes computer-specific information

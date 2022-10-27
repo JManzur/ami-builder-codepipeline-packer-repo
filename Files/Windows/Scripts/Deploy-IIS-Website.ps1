@@ -25,7 +25,7 @@ try
     $StatusData = $StatusData.Replace('IDPlaceHolder', $ID)
     $StatusData | Out-File -encoding ASCII $StatusDotJSON
     # Deploy the website
-	Install-Module -Name 'IISAdministration'
+	Install-Module -Name 'IISAdministration' -Force
 	New-Item -ItemType Directory -Name 'AppWebsite' -Path 'C:\'
 	New-IISSite -Name 'AppWebsite' -PhysicalPath 'C:\AppWebsite\' -BindingInformation "*:8882:"
     New-WebApplication -Name "status" -Site "AppWebsite" -PhysicalPath "C:\AppWebsite\status.html" -ApplicationPool "AppWebsite"
