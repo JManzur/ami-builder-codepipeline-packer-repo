@@ -17,16 +17,16 @@ try
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
 
 	Write-Host "INFO: Deploying Website"
-    # Set a custom ID in the index.html and status.json files
-    [string]$ID = Get-Random
-    $IndexDotHTML = "C:\AppWebsite\index.html"
-    $IndexData = Get-Content $IndexDotHTML
-    $IndexData = $IndexData.Replace('IDPlaceHolder', $ID)
-    $IndexData | Out-File -encoding ASCII $IndexDotHTML
-    $StatusDotJSON = "C:\AppWebsite\status\status.json"
-    $StatusData = Get-Content $StatusDotJSON
-    $StatusData = $StatusData.Replace('IDPlaceHolder', $ID)
-    $StatusData | Out-File -encoding ASCII $StatusDotJSON
+    # # Set a custom ID in the index.html and status.json files
+    # [string]$ID = Get-Random
+    # $IndexDotHTML = "C:\AppWebsite\index.html"
+    # $IndexData = Get-Content $IndexDotHTML
+    # $IndexData = $IndexData.Replace('IDPlaceHolder', $ID)
+    # $IndexData | Out-File -encoding ASCII $IndexDotHTML
+    # $StatusDotJSON = "C:\AppWebsite\status\status.json"
+    # $StatusData = Get-Content $StatusDotJSON
+    # $StatusData = $StatusData.Replace('IDPlaceHolder', $ID)
+    # $StatusData | Out-File -encoding ASCII $StatusDotJSON
     # Deploy the website
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 	Install-Module -Name 'IISAdministration' -Force
